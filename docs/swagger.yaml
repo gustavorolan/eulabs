@@ -1,0 +1,41 @@
+basePath: /api/v0
+definitions:
+  dto.ErrorDetails:
+    properties:
+      message:
+        type: string
+    type: object
+  dto.Response:
+    properties:
+      data: {}
+      error:
+        $ref: '#/definitions/dto.ErrorDetails'
+      http_status:
+        type: integer
+      success:
+        type: boolean
+    type: object
+info:
+  contact: {}
+  title: eulabs
+  version: 0.0.1
+paths:
+  /product:
+    post:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/dto.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/dto.Response'
+      summary: Create product
+swagger: "2.0"
