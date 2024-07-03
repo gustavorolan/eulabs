@@ -10,6 +10,13 @@ type Handler struct {
 	Service product.Service
 }
 
+// @Summary Create product
+// @Produce json
+// @RequestBody id path int true "User ID"
+// @Success 200 {object} dto.Response
+// @Failure 404 {object} dto.Response
+// @Failure 500 {object} dto.Response
+// @Router /product [post]
 func (handler Handler) Create(c echo.Context) error {
 	productRequest := new(dto.NewProductRequest)
 
