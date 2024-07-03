@@ -1,0 +1,64 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "eulabs",
+        "contact": {},
+        "version": "0.0.1"
+    },
+    "basePath": "/api/v0",
+    "paths": {
+        "/product": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create product",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/dto.Response"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.ErrorDetails": {
+            "type": "object",
+            "properties": {
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "dto.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "error": {
+                    "$ref": "#/definitions/dto.ErrorDetails"
+                },
+                "http_status": {
+                    "type": "integer"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}
