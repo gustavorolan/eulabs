@@ -25,9 +25,6 @@ Thumbs.db
 # Log files
 *.log
 
-# Environment file
-.env
-
 # Ignore binary and other build artifacts
 bin/
 release/

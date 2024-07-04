@@ -24,7 +24,7 @@ func TestHandler_Create_FieldError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	body := factory.GetCreateNewProductJsonRequestWithoutSomeParams()
 	_, handler := getTestContext(t)
-	responseExpected := factory.GetProductResponseWithoutSomeParams()
+	responseExpected := factory.GetCreateProductResponseWithoutSomeParams()
 	echoContext, rec := factory.GetContext(body, rec)
 
 	err := handler.Create(echoContext)
@@ -39,13 +39,73 @@ func TestHandler_Create_InvalidFieldError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	body := factory.GetCreateNewProductJsonRequestInvalidParam()
 	_, handler := getTestContext(t)
-	responseExpected := factory.GetProductResponseWithInvalidParam()
+	responseExpected := factory.GetCreateProductResponseWithInvalidParam()
 	echoContext, rec := factory.GetContext(body, rec)
 
 	err := handler.Create(echoContext)
 
 	if assert.NoError(t, err) {
-		assert.Equal(t, http.StatusInternalServerError, echoContext.Response().Status)
+		assert.Equal(t, http.StatusBadRequest, echoContext.Response().Status)
+		assert.Equal(t, responseExpected, unmarshal(rec))
+	}
+}
+
+func TestHandler_Update_FieldError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	body := factory.GetCreateNewProductJsonRequestWithoutSomeParams()
+	_, handler := getTestContext(t)
+	responseExpected := factory.GetUpdateProductResponseWithoutSomeParams()
+	echoContext, rec := factory.GetContext(body, rec)
+
+	err := handler.Update(echoContext)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, http.StatusBadRequest, echoContext.Response().Status)
+		assert.Equal(t, responseExpected, unmarshal(rec))
+	}
+}
+
+func TestHandler_Update_InvalidFieldError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	body := factory.GetCreateNewProductJsonRequestInvalidParam()
+	_, handler := getTestContext(t)
+	responseExpected := factory.GetUpdateProductResponseWithInvalidParam()
+	echoContext, rec := factory.GetContext(body, rec)
+
+	err := handler.Update(echoContext)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, http.StatusBadRequest, echoContext.Response().Status)
+		assert.Equal(t, responseExpected, unmarshal(rec))
+	}
+}
+
+func TestHandler_GetAll_FieldError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	body := factory.GetPageableJsonRequestWithoutSomeParams()
+	_, handler := getTestContext(t)
+	responseExpected := factory.GetAllProductsResponseWithoutSomeParams()
+	echoContext, rec := factory.GetContext(body, rec)
+
+	err := handler.Update(echoContext)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, http.StatusBadRequest, echoContext.Response().Status)
+		assert.Equal(t, responseExpected, unmarshal(rec))
+	}
+}
+
+func TestHandler_GetAll_InvalidFieldError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	body := factory.GetPageableJsonRequestInvalidParam()
+	_, handler := getTestContext(t)
+	responseExpected := factory.GetAllProductsResponseWithInvalidParam()
+	echoContext, rec := factory.GetContext(body, rec)
+
+	err := handler.Update(echoContext)
+
+	if assert.NoError(t, err) {
+		assert.Equal(t, http.StatusBadRequest, echoContext.Response().Status)
 		assert.Equal(t, responseExpected, unmarshal(rec))
 	}
 }
