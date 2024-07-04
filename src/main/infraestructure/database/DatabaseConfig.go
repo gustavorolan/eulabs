@@ -14,7 +14,6 @@ var database *gorm.DB
 var e error
 
 func DatabaseInit() {
-
 	if err := godotenv.Load(); err != nil {
 		log.Fatalf("Error loading .env file: %v", err)
 	}
@@ -26,6 +25,12 @@ func DatabaseInit() {
 	port := 3306
 
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc=Local", user, password, host, port, dbName)
+
+	DatabaseInitWithParams(dsn)
+}
+
+func DatabaseInitWithParams(dsn string) {
+
 	database, e = gorm.Open(mysql.Open(dsn), &gorm.Config{})
 
 	if e != nil {
