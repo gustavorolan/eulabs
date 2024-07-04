@@ -10,18 +10,11 @@ type Handler struct {
 	Service product.Service
 }
 
-// @Summary Create product
-// @Produce json
-// @RequestBody id path int true "User ID"
-// @Success 200 {object} dto.Response
-// @Failure 404 {object} dto.Response
-// @Failure 500 {object} dto.Response
-// @Router /product [post]
 func (handler Handler) Create(c echo.Context) error {
 	productRequest := new(dto.NewProductRequest)
 
 	if err := c.Bind(productRequest); err != nil {
-		response := dto.NewErrorResponseInternalServerError(err.Error())
+		response := dto.NewErrorResponseBadRequest(err.Error())
 		return toJson(response, c)
 	}
 
@@ -47,7 +40,7 @@ func (handler Handler) Update(c echo.Context) error {
 	request := new(dto.UpdateProductRequest)
 
 	if err := c.Bind(request); err != nil {
-		response := dto.NewErrorResponseInternalServerError(err.Error())
+		response := dto.NewErrorResponseBadRequest(err.Error())
 		return toJson(response, c)
 	}
 
@@ -74,7 +67,7 @@ func (handler Handler) GetAll(c echo.Context) error {
 	pageable := new(dto.Pageable)
 
 	if err := c.Bind(pageable); err != nil {
-		response := dto.NewErrorResponseInternalServerError(err.Error())
+		response := dto.NewErrorResponseBadRequest(err.Error())
 		return toJson(response, c)
 	}
 
