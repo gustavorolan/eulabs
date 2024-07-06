@@ -21,4 +21,5 @@ func Resource(e *echo.Group) {
 	bookRoute.GET("/:id", handler.GetById)
 	bookRoute.PUT("/:id", handler.Update)
 	bookRoute.DELETE("/:id", handler.Delete)
+	bookRoute.POST("/many", handler.CreateMany)
 }

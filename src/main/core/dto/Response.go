@@ -5,7 +5,7 @@ import "net/http"
 type Response struct {
 	Success    bool          `json:"success"`
 	Data       interface{}   `json:"data,omitempty"`
-	HTTPStatus int           `json:"http_status"`
+	HTTPStatus int           `json:"httpStatus"`
 	Error      *ErrorDetails `json:"error,omitempty"`
 }
 

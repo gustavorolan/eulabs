@@ -35,17 +35,45 @@ func (m *MockService) EXPECT() *MockServiceMockRecorder {
 }
 
 // Create mocks base method.
-func (m *MockService) Create(b *dto.NewProductRequest) dto.Response {
+func (m *MockService) Create(request *dto.NewProductRequest) dto.Response {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Create", b)
+	ret := m.ctrl.Call(m, "Create", request)
 	ret0, _ := ret[0].(dto.Response)
 	return ret0
 }
 
 // Create indicates an expected call of Create.
-func (mr *MockServiceMockRecorder) Create(b interface{}) *gomock.Call {
+func (mr *MockServiceMockRecorder) Create(request interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockService)(nil).Create), b)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockService)(nil).Create), request)
+}
+
+// CreateMany mocks base method.
+func (m *MockService) CreateMany() dto.Response {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateMany")
+	ret0, _ := ret[0].(dto.Response)
+	return ret0
+}
+
+// CreateMany indicates an expected call of CreateMany.
+func (mr *MockServiceMockRecorder) CreateMany() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateMany", reflect.TypeOf((*MockService)(nil).CreateMany))
+}
+
+// CreateManyWithChanel mocks base method.
+func (m *MockService) CreateManyWithChanel() dto.Response {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateManyWithChanel")
+	ret0, _ := ret[0].(dto.Response)
+	return ret0
+}
+
+// CreateManyWithChanel indicates an expected call of CreateManyWithChanel.
+func (mr *MockServiceMockRecorder) CreateManyWithChanel() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateManyWithChanel", reflect.TypeOf((*MockService)(nil).CreateManyWithChanel))
 }
 
 // Delete mocks base method.
