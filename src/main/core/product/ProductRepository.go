@@ -10,4 +10,5 @@ type Repository interface {
 	Update(b *Product) (*Product, error)
 	DeleteById(id string) (*Product, error)
 	FindAll(pageable *dto.Pageable) (dto.Page, error)
+	CreateBatch(products []*Product) error
 }

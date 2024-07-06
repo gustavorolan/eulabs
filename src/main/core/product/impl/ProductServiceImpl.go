@@ -3,9 +3,13 @@ package impl
 import (
 	"eulabs/src/main/core/dto"
 	"eulabs/src/main/core/product"
+	"eulabs/src/main/core/utils"
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"sync"
+	"time"
 )
 
 type ServiceImpl struct {
@@ -100,4 +104,118 @@ func (s ServiceImpl) GetAll(pageable *dto.Pageable) dto.Response {
 	pageResponse := product.MapToProductResponseList(page)
 
 	return dto.NewSuccessResponseOk(pageResponse)
+}
+
+func (s ServiceImpl) CreateManyWithChanel() dto.Response {
+	saveDbChanel := make(chan *product.Product)
+	printChanel := make(chan *product.Product)
+
+	wg := sync.WaitGroup{}
+
+	go sendData(saveDbChanel, &wg)
+	go sendData(printChanel, &wg)
+
+	for i := 0; i < 20; i++ {
+		wg.Add(i)
+		go s.receiveData(saveDbChanel, &wg)
+	}
+
+	go s.receiveDataSout(printChanel, &wg)
+
+	wg.Wait()
+
+	return dto.NewSuccessResponseCreated(nil)
+}
+
+func (s ServiceImpl) receiveDataSout(chanel chan *product.Product, wg *sync.WaitGroup) {
+	defer wg.Done()
+	wg.Add(1)
+	for {
+		data, ok := <-chanel
+		if !ok {
+			fmt.Println("Channel closed")
+			return
+		}
+		fmt.Println(data)
+	}
+
+}
+
+func (s ServiceImpl) receiveData(chanel chan *product.Product, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for {
+		data, ok := <-chanel
+		if !ok {
+			fmt.Println("Channel closed")
+			return
+		}
+		_, _ = s.Repository.Create(data)
+	}
+
+}
+
+func sendData(productChanel chan *product.Product, wg *sync.WaitGroup) {
+	defer wg.Done()
+	wg.Add(1)
+	i := 0
+	for i < 10000 {
+		p := product.Product{
+			Description: strconv.Itoa(i),
+			Name:        strconv.Itoa(i),
+		}
+
+		productChanel <- &p
+		i++
+	}
+	defer close(productChanel)
+}
+
+func (s ServiceImpl) CreateMany() dto.Response {
+	products := make([]product.Product, 0)
+	i := 0
+	for i < 10000 {
+		p := product.Product{
+			Description: strconv.Itoa(i),
+			Name:        strconv.Itoa(i),
+		}
+
+		products = append(products, p)
+		i++
+	}
+
+	s.createMany(products)
+
+	response := utils.Map(products,
+		func(p product.Product) int {
+			return p.ID
+		})
+
+	return dto.NewSuccessResponseOk(response)
+}
+
+func (s ServiceImpl) createMany(products []product.Product) {
+
+	var wg sync.WaitGroup
+
+	chunks := utils.ChunkBy(products, 30)
+
+	for index, ps := range chunks {
+		wg.Add(1)
+		go s.createList(ps, index, &wg)
+	}
+	wg.Wait()
+}
+
+func (s ServiceImpl) createList(ps []*product.Product, index int, wg *sync.WaitGroup) {
+
+	fmt.Printf(time.Now().String()+" Iniciando processamento do chunck: %v\n", index)
+
+	err := s.Repository.CreateBatch(ps)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Printf(time.Now().String()+" Finalizando processamento do chunck: %v\n", index)
+
+	defer wg.Done()
 }

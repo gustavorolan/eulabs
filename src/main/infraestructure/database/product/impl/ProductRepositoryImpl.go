@@ -46,6 +46,12 @@ func (r RepositoryImpl) FindAll(pageable *dto.Pageable) (dto.Page, error) {
 	return page, err
 }
 
+func (r RepositoryImpl) CreateBatch(products []*product.Product) error {
+	db := config.DB()
+	tx := db.CreateInBatches(products, 10)
+	return tx.Error
+}
+
 func Paginate(pagination *dto.Pageable) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		offset := (pagination.Page - 1) * pagination.PageSize

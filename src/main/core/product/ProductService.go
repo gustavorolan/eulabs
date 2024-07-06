@@ -5,9 +5,11 @@ package product
 import "eulabs/src/main/core/dto"
 
 type Service interface {
-	Create(b *dto.NewProductRequest) dto.Response
+	Create(request *dto.NewProductRequest) dto.Response
 	GetById(id string) dto.Response
 	Update(b *dto.UpdateProductRequest) dto.Response
 	Delete(id string) dto.Response
 	GetAll(*dto.Pageable) dto.Response
+	CreateMany() dto.Response
+	CreateManyWithChanel() dto.Response
 }

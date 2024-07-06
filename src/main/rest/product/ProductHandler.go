@@ -80,6 +80,13 @@ func (handler Handler) GetAll(c echo.Context) error {
 	return toJson(response, c)
 }
 
+func (handler Handler) CreateMany(c echo.Context) error {
+
+	response := handler.Service.CreateManyWithChanel()
+
+	return toJson(response, c)
+}
+
 func toJson(r dto.Response, c echo.Context) error {
 	return c.JSON(r.HTTPStatus, r)
 }
