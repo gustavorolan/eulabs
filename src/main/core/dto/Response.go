@@ -1,6 +1,8 @@
 package dto
 
-import "net/http"
+import (
+	"net/http"
+)
 
 type Response struct {
 	Success    bool          `json:"success"`
@@ -31,6 +33,14 @@ func NewErrorResponse(message string, httpStatus int) Response {
 	}
 }
 
+func NewMapErrorResponse(mapData interface{}, httpStatus int) Response {
+	return Response{
+		Success:    false,
+		HTTPStatus: httpStatus,
+		Data:       mapData,
+	}
+}
+
 func NewSuccessResponseOk(data interface{}) Response {
 	return NewSuccessResponse(data, http.StatusOK)
 }
@@ -49,4 +59,8 @@ func NewErrorResponseNotFound(message string) Response {
 
 func NewErrorResponseInternalServerError(message string) Response {
 	return NewErrorResponse(message, http.StatusInternalServerError)
+}
+
+func NewMapErrorResponseBadRequest(mapData interface{}) Response {
+	return NewMapErrorResponse(mapData, http.StatusBadRequest)
 }

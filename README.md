@@ -1,7 +1,7 @@
 # API de Gerenciamento de Produtos
 
 # Implementação
-Este projeto foi implementado com simplicidade para focar no básico do gerenciamento de produtos, utilizando Go. Optei por não adicionar uma tabela separada para preços, pois o maior desafio seria programar em go.
+Este projeto foi implementado com simplicidade para focar no básico do gerenciamento de produtos, utilizando Go
 
 ## Visão Geral
 

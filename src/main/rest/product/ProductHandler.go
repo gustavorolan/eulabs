@@ -27,6 +27,23 @@ func (handler Handler) Create(c echo.Context) error {
 	return c.JSON(response.HTTPStatus, response)
 }
 
+func (handler Handler) CreateMany(c echo.Context) error {
+	productsRequest := new(dto.NewProductsRequest)
+
+	if err := c.Bind(productsRequest); err != nil {
+		response := dto.NewErrorResponseBadRequest(err.Error())
+		return toJson(response, c)
+	}
+
+	if err := c.Validate(productsRequest); err != nil {
+		return toJson(dto.NewErrorResponseBadRequest(err.Error()), c)
+	}
+
+	response := handler.Service.CreateMany(productsRequest)
+
+	return c.JSON(response.HTTPStatus, response)
+}
+
 func (handler Handler) GetById(c echo.Context) error {
 	id := c.Param("id")
 

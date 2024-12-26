@@ -16,6 +16,34 @@ var loggerInfo = log.New(os.Stdout, "[INFO] ", log.Ldate|log.Ltime|log.Lshortfil
 
 var loggerError = log.New(os.Stdout, "[ERROR] ", log.Ldate|log.Ltime|log.Lshortfile)
 
+func (s ServiceImpl) CreateMany(request *dto.NewProductsRequest) dto.Response {
+
+	products, hasError := s.ProductsRequestToProductsEntities(request)
+
+	if hasError {
+		return dto.NewMapErrorResponseBadRequest(product.ToResponse(products))
+	}
+
+	return dto.NewSuccessResponseCreated(product.ToResponse(products))
+}
+
+func (s ServiceImpl) ProductsRequestToProductsEntities(request *dto.NewProductsRequest) (map[*product.Product]error, bool) {
+	products := make(map[*product.Product]error)
+	var hasError = false
+
+	for _, value := range request.Products {
+		productEntity := product.NewProductRequestToEntity(&value)
+		productEntitySaved, err := s.Repository.Create(&productEntity)
+		if err != nil {
+			hasError = true
+		} else {
+			loggerInfo.Println(`Product created successfully id: ` + strconv.Itoa(productEntitySaved.ID))
+		}
+		products[&productEntity] = err
+	}
+	return products, hasError
+}
+
 func (s ServiceImpl) Create(request *dto.NewProductRequest) dto.Response {
 
 	productEntity := product.NewProductRequestToEntity(request)
