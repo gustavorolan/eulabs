@@ -1,6 +1,8 @@
 package product
 
-import "eulabs/src/main/core/dto"
+import (
+	"eulabs/src/main/core/dto"
+)
 
 func (product Product) ToResponse() dto.ProductResponse {
 	return dto.ProductResponse{
@@ -10,6 +12,32 @@ func (product Product) ToResponse() dto.ProductResponse {
 		Price:       product.Price,
 		Stock:       product.Stock,
 	}
+}
+
+func ToResponse(productsMap map[*Product]error) *dto.ProductsResponse {
+	var products = make([]*dto.ProductResponse, 0)
+	var response = new(dto.ProductsResponse)
+
+	for key, value := range productsMap {
+		product := &dto.ProductResponse{
+			ID:           key.ID,
+			Name:         key.Name,
+			Description:  key.Description,
+			Price:        key.Price,
+			Stock:        key.Stock,
+			ErrorMessage: "",
+		}
+
+		if value != nil {
+			product.ErrorMessage = value.Error()
+		}
+
+		products = append(products, product)
+	}
+
+	response.Products = products
+
+	return response
 }
 
 func NewProductRequestToEntity(request *dto.NewProductRequest) Product {
